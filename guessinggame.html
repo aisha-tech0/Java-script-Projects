@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GUESS GAME</title>
+  </head>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap");
+
+    body {
+      margin: 0;
+      font-family: "VT323", monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(to right, #73d3da, #66a6ff);
+      transition: 0.6s ease-in-out;
+    }
+    button {
+      color: black;
+      background-color: #ffb6c1;
+      margin-top: 20px;
+      margin-left: 28px;
+      border-radius: 10px;
+      border-color: #e00d81;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: #ff9aa2;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+      transform: scale(1.05);
+    }
+    #input {
+      padding: 10px;
+      border-radius: 6px;
+      background-color: #ffffff;
+      color: black;
+      text-align: center;
+      border: 3px solid #b45e9f;
+      font-weight: bold;
+    }
+    #game-area {
+      background: rgb(3, 95, 8);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 50px;
+      box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+      color: black;
+    }
+    #container {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #feedback {
+      text-align: center;
+      margin-top: 18px;
+      /* margin-right: 100px; */
+      font-size: 18px;
+      font-weight: bold;
+      color: #f1c40f;
+    }
+
+    #attmps,
+    #score {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+
+    footer {
+      text-align: center;
+      position: fixed;
+      bottom: 10px;
+      color: white;
+      font-weight: bold;
+      letter-spacing: 2px;
+      opacity: 0.9;
+    }
+  </style>
+
+  <body>
+    <div id="container">
+      <h1 style="color: whitesmoke; letter-spacing: 2px">
+        Guess The Number GAME
+      </h1>
+      <p style="font-size: large; font-weight: bold; color: rgb(245, 245, 12)">
+        I am Thinking of a number... Guess it!
+      </p>
+      <div id="game-area">
+        <p id="pa" style="color: white; font-size: large; font-weight: bold">
+          Enter any number between 1--30
+        </p>
+        <input id="input" type="number" placeholder="enter the number here" />
+        <div id="feedback"></div>
+        <div id="attmps"></div>
+        <div id="score"></div>
+
+        <button id="guessed">Guess</button>
+        <button id="restart">Restart</button>
+      </div>
+    </div>
+    <footer><p>&copy;2025 GUESS GAME BY|Aisha Jama</p></footer>
+  </body>
+</html>
+
+<script>
+  let min = 1;
+  let max = 30;
+  let attempts = 0;
+  let score = 0;
+  let maxAttempts = 5;
+
+  // THE GAME FORMULA//
+  target = Math.floor(Math.random() * (max - min + 1) + min);
+
+  const button = document.getElementById("guessed");
+  const buttn = document.getElementById("restart");
+  const feedback = document.getElementById("feedback");
+  const guess = document.getElementById("input");
+  const displayAttempt = document.getElementById("attmps");
+  const scoreDisplay = document.getElementById("score");
+
+  displayAttempt.textContent = `attempts: ${attempts}`;
+  scoreDisplay.textContent = `Score: ${score}`;
+
+  //THE RESTART BUTTON//
+  buttn.addEventListener("click", () => {
+    target = Math.floor(Math.random() * (max - min + 1) + min);
+    feedback.textContent = "";
+    guess.value = "";
+    attempts = 0;
+    displayAttempt.textContent = `Attempts: ${attempts}`;
+    document.body.style.background = document.body.style.background =
+      "linear-gradient(135deg, #3c1053, #ad5389)";
+    button.disabled = false;
+    guess.disabled = false;
+  });
+
+  //THE GUESS BUTTON//
+  button.addEventListener("click", function () {
+    //IF THE USER DOESN'T ENTER THE RANGE SET//
+    const guessValue = Number(guess.value);
+    if (!guessValue || guessValue < min || guessValue > max) {
+      feedback.textContent = `Please enter a number between ${min} and ${max}!`;
+      return;
+    }
+    if (attempts >= maxAttempts) {
+      feedback.textContent = `Game Over! Reached the maximum attempts`;
+      button.disabled = true;
+      guess.disabled = true;
+      document.body.style.background =
+        "radial-gradient(circle, #b90a0a, #350505)";
+      return;
+    }
+
+    attempts++;
+    displayAttempt.textContent = `Attempts: ${attempts}`;
+    // IF THE USER GUESSES THE CORRECT NUMBER DO THIS//
+    if (guessValue === target) {
+      document.body.style.background =
+        "radial-gradient(circle, #0ab953, #05351a)";
+      document.getElementById("feedback").textContent =
+        "Congrats! You guessed it correct!🎉";
+      score += 10;
+      scoreDisplay.textContent = `Score: ${score}`;
+      button.disabled = true;
+      guess.disabled = true;
+      input.value = "";
+      attempts++;
+    }
+    //IF HIGHER DO THIS//
+    else if (guessValue > target) {
+      document.getElementById("feedback").textContent = "too high! Try again";
+    }
+    //IF LOWER DO THIS//
+    else {
+      document.getElementById("feedback").textContent = "too low! Try again";
+    }
+  });
+</script>
